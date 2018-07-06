@@ -8,8 +8,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
-import android.widget.Scroller;
 
 import java.util.ArrayList;
 
@@ -23,8 +21,6 @@ public class AutoScrollView extends ViewGroup {
     private float mSpeed = 100.0f;//每秒滚动的像素
     private int mChildHeight;
     private int mCurrentShow;
-    private Scroller mScroller;
-    private boolean mNeedLayoutChild = true;
 
     private int mIndex;
 
@@ -54,7 +50,6 @@ public class AutoScrollView extends ViewGroup {
         /*
         每次滚动一个条目 滚完了再滚下一个条目
          */
-        mScroller = new Scroller(getContext(), new LinearInterpolator());
     }
 
     public void startScroll() {// 0 0 to -138 -138 | -138 138 to -276 0 | 0 0 to -138 -138
@@ -73,7 +68,6 @@ public class AutoScrollView extends ViewGroup {
                 int size = mViewList.size();
                 for (int i = 0; i < size; ++i) {
                     View view = mViewList.get(i);
-//                    view.setTranslationY(value);
                     view.offsetTopAndBottom(value - lastValue);
                 }
                 lastValue = value;
@@ -119,13 +113,6 @@ public class AutoScrollView extends ViewGroup {
     }
 
     @Override
-    public void computeScroll() {
-        if (mScroller.computeScrollOffset()) {
-            //这里对每个view修改top
-        }
-    }
-
-    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         measureChildren(widthMeasureSpec, heightMeasureSpec);
@@ -137,7 +124,6 @@ public class AutoScrollView extends ViewGroup {
         /*
         所有view竖向排列下去
          */
-//        if(mNeedLayoutChild){
         int size = mViewList.size();
         int childViewCountHeight = 0;
         for (int i = 0; i < size; ++i) {
@@ -149,8 +135,6 @@ public class AutoScrollView extends ViewGroup {
             childViewCountHeight = childViewCountHeight + childHeight;
             mChildHeight = childHeight;
         }
-//            mNeedLayoutChild = false;
-//        }
     }
 
     private int getDuration() {
@@ -168,7 +152,7 @@ public class AutoScrollView extends ViewGroup {
         int count = mAdapter.getCount();
         for (int i = 0; i < mViewCount; ++i) {// 0 1
             View view = layoutInflater.inflate(mAdapter.getLayoutId(), null);
-            //这里高度给一个具体数字  子view就是那个宽度了
+            //这里高度给一个具体数字  子view就是那个宽度了或者在item_view.xml里给minHeight
             addView(view, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
             mViewList.add(view);
             if (i < count) {
@@ -197,8 +181,5 @@ public class AutoScrollView extends ViewGroup {
     }
 
     public void test2() {
-        for (View view : mViewList) {
-            L.i("getTranslationY:" + view.getTranslationY());
-        }
     }
 }
