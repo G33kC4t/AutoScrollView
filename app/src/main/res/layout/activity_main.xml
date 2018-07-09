@@ -3,14 +3,26 @@
     android:layout_width="match_parent"
     android:clipChildren="true"
     android:layout_height="match_parent">
-
+    <com.witcher.autoscrollview.AutoScrollView
+        android:clipChildren="true"
+        android:background="@color/aa"
+        android:id="@+id/autoscrollview2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+    <com.witcher.autoscrollview.AutoScrollView
+        android:clipChildren="true"
+        android:background="@color/aa"
+        android:id="@+id/autoscrollview3"
+        android:layout_marginTop="70dp"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
     <com.witcher.autoscrollview.AutoScrollView
         android:clipChildren="true"
         android:background="@color/aa"
         android:layout_centerVertical="true"
         android:id="@+id/autoscrollview"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="150dp" />
 
     <LinearLayout
         android:layout_width="match_parent"

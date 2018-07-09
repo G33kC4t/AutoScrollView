@@ -15,7 +15,7 @@ public class AutoScrollView extends ViewGroup {
 
     private ArrayList<View> mViewList = new ArrayList<>();
     private AutoScrollAdapter mAdapter;
-    private int mShowCount = 2;//最多同时出现view的数量
+    private int mShowCount = 5;//最多同时出现view的数量
     private int mViewCount = mShowCount;
 
     private float mSpeed = 100.0f;//每秒滚动的像素
@@ -81,24 +81,28 @@ public class AutoScrollView extends ViewGroup {
             @Override
             public void onAnimationEnd(Animator animation) {
                 //到底了就把第一个挪下来然后绑定数据
-                if (mCurrentShow == mViewCount - 1) {
+//                if (mCurrentShow == mViewCount - 1) {
+                    L.i("到底了 复用一个");
                     View topView = mViewList.remove(0);
                     mViewList.add(topView);
                     topView.offsetTopAndBottom(mChildHeight + getHeight());//去父view的下边呆着
                     int count = mAdapter.getCount();
-                    if(mIndex == count){
+                    if(mIndex >= count){
                         //说明到最后一个数据了
+                        L.i("最后一个数据了 count:"+count+"  index:"+mIndex);
                         mIndex = 0;
                     }
+                    L.i("bind view mIndex:"+mIndex);
                     mAdapter.bindView(mIndex, topView);//绑定数据 这里还得做判断有没有下一条数据 没有的话就循环回0
                     //这里会触发一次layout 0,138
                     mIndex++;
                     mCurrentShow = 0;
 //                    //继续滚动 0 0 to -138 -138 | -138 138 to -276 0 | 0 0 to -138 -138
                     startScroll();
-                } else {
-                    startScroll();
-                }
+//                } else {
+//                    L.i("继续滚动");
+//                    startScroll();
+//                }
             }
 
             @Override
@@ -129,7 +133,6 @@ public class AutoScrollView extends ViewGroup {
         for (int i = 0; i < size; ++i) {
             View childView = mViewList.get(i);
             int childHeight = childView.getMeasuredHeight();
-            L.i("childHeight:" + childHeight);
             int childViewTop = childViewCountHeight;
             childView.layout(left, childViewTop, right, childViewTop + childHeight);
             childViewCountHeight = childViewCountHeight + childHeight;
